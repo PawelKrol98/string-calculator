@@ -1,4 +1,4 @@
-CXX = g++
+CXX = clang++
 CXXFLAGS = -Wall --std=c++17
 GTEST_FLAGS = -lgtest_main -lgtest 
 
@@ -19,7 +19,7 @@ build_test: $(TEST_OBJ_FILES) $(BIN_DIR)/tests
 run_test: 
 	$(BIN_DIR)/tests
 
-$(BIN_DIR)/tests: $(TEST_OBJ_FILES) # Zaktualizowano regułę dla plików testowych
+$(BIN_DIR)/tests: $(TEST_OBJ_FILES)
 	mkdir -p $(BIN_DIR)
 	$(CXX) $(CXXFLAGS) $(GTEST_FLAGS) $(TEST_OBJ_FILES) -o $(BIN_DIR)/tests
 
