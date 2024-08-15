@@ -1,18 +1,32 @@
 #pragma once
 #include "NullExpression.hpp"
 #include "Number.hpp"
+#include "Operation.hpp"
+#include <memory>
 
 class ExpressionFactory
 {
 public:
-    static Expression* create(std::string input_expression)
+    static std::shared_ptr<Expression> create(const std::string& input_expression)
 	{
 		if (!check_brackets(input_expression))
 		{
 			std::cout << "ERROR invalid brackets, returning null expression" << std::endl;
-			return new NullExpression();
+			return std::make_shared<NullExpression>();
 		}
-		return new Number(3);
+		if (auto expr = split_for_adding_or_substracting(input_expression); expr)
+		{
+			return expr;
+		}
+		if (auto expr = check_if_only_number_left(input_expression); expr)
+		{
+			return expr;
+		}
+		if (input_expression.front() == '(' && input_expression.back() == ')')
+		{
+			return create(input_expression.substr(1, input_expression.length() - 2));
+		}
+		return std::make_shared<Number>(0);
 	}
 private:
 	static bool check_brackets(const std::string& input_expression)
@@ -38,5 +52,49 @@ private:
 		{
 			return false;
 		}	
-}
+    }
+	
+	static std::shared_ptr<Expression> split_for_adding_or_substracting(const std::string& input_expression)
+	{
+		int bracket_depth = 0;
+		int last_pos = -1;
+		for (size_t i = 0; i < input_expression.size(); i++)
+		{
+			if (input_expression[i] == '(')
+			{
+				bracket_depth++;
+			}
+			else if (input_expression[i] == ')')
+			{
+				bracket_depth--;
+			}
+			if (bracket_depth == 0 && (input_expression[i] == '+' || input_expression[i] == '-'))
+			{
+				last_pos = i;
+			}
+		}
+		if (last_pos == -1)
+		{
+			return nullptr;
+		}
+		else
+		{
+			return std::make_shared<Operation>(input_expression[last_pos], 
+												   create(input_expression.substr(0, last_pos)),
+												   create(input_expression.substr(last_pos + 1, input_expression.length() - last_pos)));
+		}
+	}
+
+	static std::shared_ptr<Expression> check_if_only_number_left(const std::string& input_expression)
+	{
+        try 
+        {
+            double value = std::stod(input_expression);
+            return std::make_shared<Number>(value);
+        }
+        catch (...)
+        {
+		    return nullptr;
+        }
+	}
 };
