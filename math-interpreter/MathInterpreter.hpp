@@ -30,7 +30,6 @@ public:
         std::string righthand_side = assigment.substr(equal_sing_pos + 1, assigment.size() - equal_sing_pos );
         lefthand_side.erase(std::remove_if(lefthand_side.begin(), lefthand_side.end(), ::isspace), lefthand_side.end());
         righthand_side.erase(std::remove_if(righthand_side.begin(), righthand_side.end(), ::isspace), righthand_side.end());
-        //std::cout << lefthand_side << "=" << righthand_side << std::endl;
         if (!std::all_of(lefthand_side.begin(), lefthand_side.end(), [](char c) { return std::isalpha(c); }))
         {
             return false;
@@ -44,7 +43,6 @@ public:
         {
             if (lefthand_side == function_name)
             {
-                //std::cout << lefthand_side << " " << function_name << std::endl;
                 return false;
             }
         }

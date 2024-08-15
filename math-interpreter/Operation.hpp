@@ -24,6 +24,7 @@ public:
 
     double result() override
     {
+		std::cout << "DEBUG executing operation operand" << std::endl;
         if (operand == '+')
         {
             return argument1->result() + argument2->result();
@@ -40,5 +41,7 @@ public:
         {
             return argument1->result() / argument2->result();
         }
+		std::cout << "WARNING operand argument is incorrect" << std::endl; 
+		return 0;
     }
 };

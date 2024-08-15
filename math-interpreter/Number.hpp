@@ -12,6 +12,7 @@ public:
 
     double result() override
     {
+		std::cout << "DEBUG executing number " << value << std::endl;
         return value;
     }
 };
