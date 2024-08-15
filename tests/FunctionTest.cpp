@@ -5,17 +5,16 @@
 #include "string"
 
 
-Number zero = Number(0);
-Expression* ptr = &zero;
+std::shared_ptr<Expression> ptr(new Number(0));
 class FunctionTests : public ::testing::Test
 {
 public:
     FunctionTests()
     {
-        f = new Function("sin", ptr);
+        f = std::make_shared<Function>("sin", ptr);
     }
 protected:
-    Function* f;
+    std::shared_ptr<Function> f;
 };
 
 TEST_F(FunctionTests, TestDefaultFunctionNames)
@@ -36,8 +35,8 @@ TEST_F(FunctionTests, TestSin0return0)
 
 TEST_F(FunctionTests, TestInternalFunction)
 {
-    Number* n1 = new Number(256);
-    Function* f1 = new Function("sqrt", n1);
-    Function* f2 = new Function("sqrt", f1);
+    std::shared_ptr<Number> n1(new Number(256));
+    std::shared_ptr<Function> f1(new Function("sqrt", n1));
+    std::shared_ptr<Function> f2(new Function("sqrt", f1));
     ASSERT_EQ(f2->result(), 4.0);
 }

@@ -1,26 +1,23 @@
 #pragma once
 #include "Expression.hpp"
+#include <memory>
 
 class Operation : public Expression
 {
 private:
     char operand_;
-    Expression* argument1_;
-    Expression* argument2_;
+    std::shared_ptr<Expression> argument1_;
+    std::shared_ptr<Expression> argument2_;
 
 public:
-    Operation(char operand, Expression* argument1, Expression* argument2) : 
+    Operation(char operand, std::shared_ptr<Expression> argument1, std::shared_ptr<Expression> argument2) : 
                                                                          operand_(operand),
                                                                          argument1_(argument1),
                                                                          argument2_(argument2)
     {
     }
 
-    ~Operation ()
-    {
-        delete argument1_;
-        delete argument2_;
-    }
+    ~Operation () {}
 
     double result() override
     {

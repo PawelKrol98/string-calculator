@@ -30,6 +30,13 @@ private:
 				if (bracket_depth < 0) return false;
 			}
 		}
-		return true;
-	}
+		if (bracket_depth == 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}	
+}
 };

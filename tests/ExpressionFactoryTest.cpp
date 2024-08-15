@@ -14,5 +14,6 @@ TEST(ExpressionFactoryTests, TestIncorrectBrackets)
 	EXPECT_TRUE(typeid(*ExpressionFactory::create("())()")) == typeid(NullExpression));
     EXPECT_TRUE(typeid(*ExpressionFactory::create(")(()((()))")) == typeid(NullExpression));
     EXPECT_TRUE(typeid(*ExpressionFactory::create("()())")) == typeid(NullExpression));
+	EXPECT_TRUE(typeid(*ExpressionFactory::create("(()")) == typeid(NullExpression));
 }
 

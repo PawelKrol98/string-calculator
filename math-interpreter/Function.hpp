@@ -4,26 +4,24 @@
 #include <unordered_set>
 #include <string>
 #include <functional>
+#include <memory>
 
 class Function : public Expression
 {
 private:
-    inline const static std::unordered_map<std::string, std::function<double(Expression*)>> function_map =
+    inline const static std::unordered_map<std::string, std::function<double(std::shared_ptr<Expression>)>> function_map =
     {
-        {"sin", [](Expression* ex) { return std::sin(ex->result()); }},
-        {"cos", [](Expression* ex) { return std::cos(ex->result()); }},
-        {"sqrt", [](Expression* ex) { return std::sqrt(ex->result()); }}
+        {"sin", [](std::shared_ptr<Expression> ex) { return std::sin(ex->result()); }},
+        {"cos", [](std::shared_ptr<Expression> ex) { return std::cos(ex->result()); }},
+        {"sqrt", [](std::shared_ptr<Expression> ex) { return std::sqrt(ex->result()); }}
     };
     std::string function_name_;
-    Expression* argument_;
+    std::shared_ptr<Expression> argument_;
 
 public:
-    Function(std::string function_name, Expression* argument) : function_name_(function_name), argument_(argument) {}
+    Function(std::string function_name, std::shared_ptr<Expression> argument) : function_name_(function_name), argument_(argument) {}
 
-    ~Function()
-    {
-        delete argument_;
-    }
+    ~Function() {}
 
     static std::unordered_set<std::string> get_function_names()
     {
