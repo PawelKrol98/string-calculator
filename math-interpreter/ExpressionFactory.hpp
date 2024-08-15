@@ -4,5 +4,10 @@
 class ExpressionFactory
 {
 public:
-    static Expression* create(std::string);
+    static Expression* create(std::string)
+	{
+		
+	}
+private:
+	
 };

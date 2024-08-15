@@ -14,15 +14,15 @@ private:
         {"cos", [](Expression* ex) { return std::cos(ex->result()); }},
         {"sqrt", [](Expression* ex) { return std::sqrt(ex->result()); }}
     };
-    std::string function_name;
-    Expression* argument;
+    std::string function_name_;
+    Expression* argument_;
 
 public:
-    Function(std::string _function_name, Expression* _argument) : function_name(_function_name), argument(_argument) {}
+    Function(std::string function_name, Expression* argument) : function_name_(function_name), argument_(argument) {}
 
     ~Function()
     {
-        delete argument;
+        delete argument_;
     }
 
     static std::unordered_set<std::string> get_function_names()
@@ -30,7 +30,6 @@ public:
         std::unordered_set<std::string> function_names = {};
         for (const auto& function : function_map)
         {
-            //std::cout << function.first << std::endl;
             function_names.insert(function.first);
         }
         return function_names;
@@ -38,8 +37,8 @@ public:
 
     double result() override
     {
-		std::cout << "DEBUG executing function " << function_name << std::endl;
-        auto selected_function = function_map.at(function_name);
-        return selected_function(argument);
+		std::cout << "DEBUG executing function " << function_name_ << std::endl;
+        auto selected_function = function_map.at(function_name_);
+        return selected_function(argument_);
     }
 };
