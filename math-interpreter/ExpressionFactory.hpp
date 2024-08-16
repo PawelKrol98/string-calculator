@@ -2,6 +2,7 @@
 #include "NullExpression.hpp"
 #include "Number.hpp"
 #include "Operation.hpp"
+#include "Function.hpp"
 #include <memory>
 
 class ExpressionFactory
@@ -19,6 +20,10 @@ public:
 			return expr;
 		}
         if (auto expr = split_for_multiplying_or_dividing(input_expression); typeid(*expr) != typeid(NullExpression))
+		{
+			return expr;
+		}
+		if (auto expr = prepare_function(input_expression); typeid(*expr) != typeid(NullExpression))
 		{
 			return expr;
 		}
@@ -99,6 +104,19 @@ private:
 				return std::make_shared<Operation>(input_expression[i],
 													create(input_expression.substr(0, i)),
 													create(input_expression.substr(i + 1, input_expression.length() -1)));
+			}
+		}
+		return std::make_shared<NullExpression>();
+	}
+
+	static std::shared_ptr<Expression> prepare_function(const std::string& input_expression)
+	{
+		std::unordered_set<std::string> function_names = Function::get_function_names();
+		for (const std::string& function_name : function_names)
+		{
+			if (input_expression.compare(0, function_name.size(), function_name) == 0)
+			{
+				return std::make_shared<Function>(function_name, create(input_expression.substr(function_name.size() + 1, input_expression.size() - function_name.size() - 2)));
 			}
 		}
 		return std::make_shared<NullExpression>();

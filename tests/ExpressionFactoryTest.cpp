@@ -107,3 +107,32 @@ TEST(ExpresisonFactoryTests, TestSubstractingDividing)
 	EXPECT_EQ(exp->result(), 4.0);
 }
 
+TEST(ExpresisonFactoryTests, TestBasicFunction)
+{
+	auto exp = ExpressionFactory::create("sqrt(4)");
+	EXPECT_EQ(exp->result(), 2.0);
+}
+
+TEST(ExpresisonFactoryTests, TestFunctionInFunction)
+{
+	auto exp = ExpressionFactory::create("sqrt(sqrt(256))");
+	EXPECT_EQ(exp->result(), 4.0);
+}
+
+TEST(ExpresisonFactoryTests, TestAddingFunctions)
+{
+	auto exp = ExpressionFactory::create("sqrt(4)+sqrt(100)");
+	EXPECT_EQ(exp->result(), 12.0);
+}
+
+TEST(ExpresisonFactoryTests, TestSubstractingFunctions)
+{
+	auto exp = ExpressionFactory::create("sqrt(100)-sqrt(64)");
+	EXPECT_EQ(exp->result(), 2.0);
+}
+
+TEST(ExpresisonFactoryTests, TestSubstractingInsideFunction)
+{
+	auto exp = ExpressionFactory::create("sqrt(sqrt(100)-sqrt(36))");
+	EXPECT_EQ(exp->result(), 2.0);
+}
