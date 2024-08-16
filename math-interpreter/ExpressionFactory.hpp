@@ -14,11 +14,15 @@ public:
 			std::cout << "ERROR invalid brackets, returning null expression" << std::endl;
 			return std::make_shared<NullExpression>();
 		}
-		if (auto expr = split_for_adding_or_substracting(input_expression); expr)
+		if (auto expr = split_for_adding_or_substracting(input_expression); typeid(*expr) != typeid(NullExpression))
 		{
 			return expr;
 		}
-		if (auto expr = check_if_only_number_left(input_expression); expr)
+        if (auto expr = split_for_multiplying_or_dividing(input_expression); typeid(*expr) != typeid(NullExpression))
+		{
+			return expr;
+		}
+		if (auto expr = check_if_only_number_left(input_expression); typeid(*expr) != typeid(NullExpression))
 		{
 			return expr;
 		}
@@ -57,8 +61,7 @@ private:
 	static std::shared_ptr<Expression> split_for_adding_or_substracting(const std::string& input_expression)
 	{
 		int bracket_depth = 0;
-		int last_pos = -1;
-		for (size_t i = 0; i < input_expression.size(); i++)
+		for (size_t i = input_expression.size() - 1; i > 0; i--)
 		{
 			if (input_expression[i] == '(')
 			{
@@ -70,19 +73,35 @@ private:
 			}
 			if (bracket_depth == 0 && (input_expression[i] == '+' || input_expression[i] == '-'))
 			{
-				last_pos = i;
+				return std::make_shared<Operation>(input_expression[i],
+													create(input_expression.substr(0, i)),
+													create(input_expression.substr(i + 1, input_expression.length() -1)));
 			}
 		}
-		if (last_pos == -1)
+		return std::make_shared<NullExpression>();
+	}
+
+	static std::shared_ptr<Expression> split_for_multiplying_or_dividing(const std::string& input_expression)
+	{
+		int bracket_depth = 0;
+		for (size_t i = input_expression.size() - 1; i > 0; i--)
 		{
-			return nullptr;
+			if (input_expression[i] == '(')
+			{
+				bracket_depth++;
+			}
+			else if (input_expression[i] == ')')
+			{
+				bracket_depth--;
+			}
+			if (bracket_depth == 0 && (input_expression[i] == '*' || input_expression[i] == '/'))
+			{
+				return std::make_shared<Operation>(input_expression[i],
+													create(input_expression.substr(0, i)),
+													create(input_expression.substr(i + 1, input_expression.length() -1)));
+			}
 		}
-		else
-		{
-			return std::make_shared<Operation>(input_expression[last_pos], 
-												   create(input_expression.substr(0, last_pos)),
-												   create(input_expression.substr(last_pos + 1, input_expression.length() - last_pos)));
-		}
+		return std::make_shared<NullExpression>();
 	}
 
 	static std::shared_ptr<Expression> check_if_only_number_left(const std::string& input_expression)
@@ -94,7 +113,7 @@ private:
         }
         catch (...)
         {
-		    return nullptr;
+		    return std::make_shared<NullExpression>();
         }
 	}
 };

@@ -6,15 +6,15 @@
 TEST(ExpressionFactoryTests, TestCorrectBrackets)
 {
 	EXPECT_FALSE(typeid(*ExpressionFactory::create("(1)+(1)")) == typeid(NullExpression));
-    EXPECT_FALSE(typeid(*ExpressionFactory::create("(1)*((1)+(1))+(1)")) == typeid(NullExpression));
+    EXPECT_FALSE(typeid(*ExpressionFactory::create("(1)+((1)+(1))+(1)")) == typeid(NullExpression));
 }
 
 TEST(ExpressionFactoryTests, TestIncorrectBrackets)
 {
-	EXPECT_TRUE(typeid(*ExpressionFactory::create("(1))+(1)")) == typeid(NullExpression));
-    EXPECT_TRUE(typeid(*ExpressionFactory::create(")((1)/(((3)))")) == typeid(NullExpression));
-    EXPECT_TRUE(typeid(*ExpressionFactory::create("(2)-(1))")) == typeid(NullExpression));
-	EXPECT_TRUE(typeid(*ExpressionFactory::create("((1)")) == typeid(NullExpression));
+	EXPECT_TRUE(typeid(*ExpressionFactory::create("(1)+)(1)")) == typeid(NullExpression));
+    EXPECT_TRUE(typeid(*ExpressionFactory::create(")((1)*(((1)))")) == typeid(NullExpression));
+    EXPECT_TRUE(typeid(*ExpressionFactory::create("(1)+(1))")) == typeid(NullExpression));
+	EXPECT_TRUE(typeid(*ExpressionFactory::create("((1)-1")) == typeid(NullExpression));
 }
 
 TEST(ExpressionFactoryTests, TestBasicNumber)
@@ -76,3 +76,34 @@ TEST(ExpressionFactoryTests, TestBasicDividing)
 	auto exp = ExpressionFactory::create("10/4");
 	EXPECT_EQ(exp->result(), 2.5);
 }
+
+TEST(ExpressionFactoryTests, TestTripleMultiplying)
+{
+	auto exp = ExpressionFactory::create("2*5*60");
+	EXPECT_EQ(exp->result(), 600.0);
+}
+
+TEST(ExpressionFactoryTests, TestTripleDividing)
+{
+	auto exp = ExpressionFactory::create("100/5/4");
+	EXPECT_EQ(exp->result(), 5.0);
+}
+
+TEST(ExpressionFactoryTests, TestMutliplyingAndDividing)
+{
+	auto exp = ExpressionFactory::create("15/3*20/5");
+	EXPECT_EQ(exp->result(), 20.0);
+}
+
+TEST(ExpressionFactoryTests, TestAddingMultiplying)
+{
+	auto exp = ExpressionFactory::create("2*3+6*1");
+	EXPECT_EQ(exp->result(), 12.0);
+}
+
+TEST(ExpresisonFactoryTests, TestSubstractingDividing)
+{
+	auto exp = ExpressionFactory::create("30/5-40/20");
+	EXPECT_EQ(exp->result(), 4.0);
+}
+
