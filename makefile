@@ -2,7 +2,7 @@ CXX = clang++
 CXXFLAGS = -Wall --std=c++17
 GTEST_FLAGS = -lgtest_main -lgtest 
 
-SRC_DIR := math-interpreter
+SRC_DIR := string_calculator
 TEST_DIR := tests
 BUILD_DIR := build
 BIN_DIR := $(BUILD_DIR)/bin
