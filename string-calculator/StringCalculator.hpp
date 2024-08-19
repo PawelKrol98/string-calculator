@@ -46,6 +46,7 @@ public:
             }
         }
         variable_map.insert({lefthand_side, std::stod(righthand_side)});
+        std::cout << "DEBUG variable " << lefthand_side << " assigned to " << righthand_side << std::endl;
         return true;
     }
 
@@ -63,11 +64,13 @@ public:
 	{
 		input_expression.erase(std::remove(input_expression.begin(), input_expression.end(), ' '), input_expression.end());
         for (const auto& variable : variable_map)
-        {
+        {   
+            std::cout << "### " << variable.first << " " << variable.second << std::endl;
             replace_variable(input_expression, variable.first, variable.second);
         }
         insert_between_operators(input_expression);
         correct_brackets(input_expression);
+        std::cout << "DEBUG corrected expression: " << input_expression << std::endl;
 	}
 
     double calculate(std::string expression) const
@@ -98,21 +101,23 @@ private:
     std::unordered_map<std::string, double> variable_map;
     void replace_variable(std::string& input_expression, const std::string variable_name, double value) const
     {
-        size_t pos = input_expression.find(variable_name);
+        size_t pos = 0;
+        std::string value_str = std::to_string(value);
 
-        while (pos != std::string::npos) 
+        while ((pos = input_expression.find(variable_name, pos)) != std::string::npos)
         {
-            if (pos + variable_name.length() < input_expression.length() && !isalpha(input_expression[pos + variable_name.length()])) 
-            {
-                if (pos + variable_name.length() + 1 < input_expression.length() 
-                    && input_expression[pos + variable_name.length() + 1] != '(' 
-                    && input_expression[pos + variable_name.length() + 1] != ')') 
-                {
-                    input_expression.replace(pos, variable_name.length(), std::to_string(value));
-                }
-            }
+            bool is_start_valid = (pos == 0 || !isalpha(input_expression[pos - 1])) && !isdigit(input_expression[pos - 1]);
+            bool is_end_valid = (pos + variable_name.length() == input_expression.length() || !isalpha(input_expression[pos + variable_name.length()])) && !isdigit(input_expression[pos + variable_name.length()]);
 
-            pos = input_expression.find(variable_name, pos + 1);
+            if (is_start_valid && is_end_valid)
+            {
+                input_expression.replace(pos, variable_name.length(), value_str);
+                pos += value_str.length();
+            }
+            else
+            {
+                pos += variable_name.length();
+            }
         }
     }
 
