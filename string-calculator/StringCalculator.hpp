@@ -12,8 +12,7 @@ class StringCalculator
 {
 
 public:
-    StringCalculator
-()
+    StringCalculator()
     {
         declare_variable("pi=3.14159265359");
         declare_variable("e=2.71828182845");
