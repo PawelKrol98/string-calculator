@@ -46,7 +46,7 @@ public:
             }
         }
         variable_map.insert({lefthand_side, std::stod(righthand_side)});
-        std::cout << "DEBUG variable " << lefthand_side << " assigned to " << righthand_side << std::endl;
+        //std::cout << "DEBUG variable " << lefthand_side << " assigned to " << righthand_side << std::endl;
         return true;
     }
 
@@ -65,12 +65,11 @@ public:
 		input_expression.erase(std::remove(input_expression.begin(), input_expression.end(), ' '), input_expression.end());
         for (const auto& variable : variable_map)
         {   
-            std::cout << "### " << variable.first << " " << variable.second << std::endl;
             replace_variable(input_expression, variable.first, variable.second);
         }
         insert_between_operators(input_expression);
         correct_brackets(input_expression);
-        std::cout << "DEBUG corrected expression: " << input_expression << std::endl;
+        //std::cout << "DEBUG corrected expression: " << input_expression << std::endl;
 	}
 
     double calculate(std::string expression) const

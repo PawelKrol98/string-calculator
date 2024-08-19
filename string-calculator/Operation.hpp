@@ -21,7 +21,7 @@ public:
 
     double result() override
     {
-		std::cout << "DEBUG executing operation operand" << operand_ << std::endl;
+		//std::cout << "DEBUG executing operation operand" << operand_ << std::endl;
         if (operand_ == '+')
         {
             return argument1_->result() + argument2_->result();

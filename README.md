@@ -37,7 +37,7 @@ You can declare variables that can be used in subsequent calculations:
 
 int main() {
     StringCalculator sc;
-    sc.declare_variable("X = 6");
+    sc.declare_variable("X=6");
     double result = sc.calculate("X + 12");
     std::cout << "Result: " << result << std::endl; // Outputs: Result: 18
     return 0;

@@ -35,7 +35,7 @@ public:
 
     double result() override
     {
-		std::cout << "DEBUG executing function " << function_name_ << std::endl;
+		//std::cout << "DEBUG executing function " << function_name_ << std::endl;
         auto selected_function = function_map.at(function_name_);
         return selected_function(argument_);
     }
