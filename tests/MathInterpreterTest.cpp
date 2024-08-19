@@ -94,3 +94,110 @@ TEST_F(MathInterpreterTests, TestDeclareVariableIncreaseSize)
     mi.declare_variable("X===5");
     ASSERT_EQ(mi.get_variable_names().size(), 3);
 }
+
+TEST_F(MathInterpreterTests, TestVariablesCorrecting)
+{
+	mi.declare_variable("x=3");
+	mi.declare_variable("y=5");
+	std::string my_expr = "x+y+pi+4";
+	mi.correct_expression(my_expr);
+	EXPECT_EQ(my_expr, "3.000000+5.000000+3.141593+4");
+}
+
+TEST_F(MathInterpreterTests, TestRemoveSpaces)
+{
+	std::string my_expr = "2 + 7 +   1 - (50)";
+	mi.correct_expression(my_expr);
+	EXPECT_EQ(my_expr, "2+7+1-(50)");
+}
+
+TEST_F(MathInterpreterTests, TestFillDoubleAddOperand)
+{
+	std::string my_expr = "2++1";
+	mi.correct_expression(my_expr);
+	EXPECT_EQ(my_expr, "2+0+1");
+}
+
+TEST_F(MathInterpreterTests, TestFillDoubleSubstractOperand)
+{
+	std::string my_expr = "3--1";
+	mi.correct_expression(my_expr);
+	EXPECT_EQ(my_expr, "3-0-1");
+}
+
+TEST_F(MathInterpreterTests, TestFillTripleSubstractOperand)
+{
+	std::string my_expr = "3---1";
+	mi.correct_expression(my_expr);
+	EXPECT_EQ(my_expr, "3-0-0-1");
+}
+
+TEST_F(MathInterpreterTests, TestFillDoubleMultiplyOperand)
+{
+	std::string my_expr = "3**1";
+	mi.correct_expression(my_expr);
+	EXPECT_EQ(my_expr, "3*1*1");
+}
+
+TEST_F(MathInterpreterTests, TestFillDoubleDividingOperand)
+{
+	std::string my_expr = "3//1";
+	mi.correct_expression(my_expr);
+	EXPECT_EQ(my_expr, "3/1/1");
+}
+
+TEST_F(MathInterpreterTests, TestFillAddAndSubstractOperand)
+{
+	std::string my_expr = "3+-1";
+	mi.correct_expression(my_expr);
+	EXPECT_EQ(my_expr, "3+0-1");
+}
+
+TEST_F(MathInterpreterTests, TestFillMultiplyAndAddOperand)
+{
+	std::string my_expr = "3*+1";
+	mi.correct_expression(my_expr);
+	EXPECT_EQ(my_expr, "3*1+1");
+}
+
+TEST_F(MathInterpreterTests, TestFillMinusNumber)
+{
+	std::string my_expr = "-34";
+	mi.correct_expression(my_expr);
+	EXPECT_EQ(my_expr, "0-34");
+}
+
+TEST_F(MathInterpreterTests, TestFillDivideNumber)
+{
+	std::string my_expr = "/34";
+	mi.correct_expression(my_expr);
+	EXPECT_EQ(my_expr, "1/34");
+}
+
+TEST_F(MathInterpreterTests, TestFillEmptyBracket)
+{
+	std::string my_expr = "()";
+	mi.correct_expression(my_expr);
+	EXPECT_EQ(my_expr, "(0)");
+}
+
+TEST_F(MathInterpreterTests, TestFillMultiplyBracket)
+{
+	std::string my_expr = "4(2+4)";
+	mi.correct_expression(my_expr);
+	EXPECT_EQ(my_expr, "4*(2+4)");
+}
+
+TEST_F(MathInterpreterTests, TestFillMultiplyBrackeOpposite)
+{
+	std::string my_expr = "(2+4)*3";
+	mi.correct_expression(my_expr);
+	EXPECT_EQ(my_expr, "(2+4)*3");
+}
+
+TEST_F(MathInterpreterTests, TestFillMultiplyBrackets)
+{
+	std::string my_expr = "(4+4/2)(2+4)";
+	mi.correct_expression(my_expr);
+	EXPECT_EQ(my_expr, "(4+4/2)*(2+4)");
+}
