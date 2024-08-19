@@ -201,3 +201,24 @@ TEST_F(MathInterpreterTests, TestFillMultiplyBrackets)
 	mi.correct_expression(my_expr);
 	EXPECT_EQ(my_expr, "(4+4/2)*(2+4)");
 }
+
+TEST_F(MathInterpreterTests, TestBasicOperation)
+{
+	EXPECT_EQ(mi.calculate("2+2"), 4.0);
+}
+
+
+TEST_F(MathInterpreterTests, TestBasicNumber)
+{
+	EXPECT_EQ(mi.calculate("2"), 2.0);
+}
+
+TEST_F(MathInterpreterTests, TestBasicFunction)
+{
+	EXPECT_EQ(mi.calculate("sqrt(625)"), 25.0);
+}
+
+TEST_F(MathInterpreterTests, TestComplexOperation)
+{
+	EXPECT_EQ(mi.calculate("/6+2(8*4-3)/(sqrt(()+12*12))"), 5.0);
+}
