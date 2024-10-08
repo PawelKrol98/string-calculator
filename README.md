@@ -11,7 +11,7 @@ The StringCalculator library is a C++ library designed to perform mathematical c
 
 Clone the repository:
       
-      git clone https://github.com/your-repo/string-calculator.git
+      git clone https://github.com/PawelKrol98/string-calculator.git
 
 Include the header file in your project:
 
