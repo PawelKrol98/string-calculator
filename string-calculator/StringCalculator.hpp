@@ -45,7 +45,7 @@ public:
                 return false;
             }
         }
-        variable_map.insert({lefthand_side, std::stod(righthand_side)});
+        variable_map[lefthand_side] = std::stod(righthand_side);
         //std::cout << "DEBUG variable " << lefthand_side << " assigned to " << righthand_side << std::endl;
         return true;
     }
