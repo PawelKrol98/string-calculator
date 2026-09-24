@@ -15,13 +15,13 @@ Clone the repository:
 
 Include the header file in your project:
 
-    #include "string-calculator/StringCalculator.hpp"
+    #include "string-calculator/string_calculator.hpp"
 
 ## Usage
 # Basic Calculation
 To perform a basic calculation, initialize the StringCalculator object and call the calculate method with the mathematical expression as a string:
 ```
-#include "string-calculator/StringCalculator.hpp"
+#include "string-calculator/string_calculator.hpp"
 
 int main() {
     StringCalculator sc;
@@ -33,7 +33,7 @@ int main() {
 # Declaring Variables
 You can declare variables that can be used in subsequent calculations:
 ```
-#include "string-calculator/StringCalculator.hpp"
+#include "string_/calculator/string_calculator.hpp"
 
 int main() {
     StringCalculator sc;
