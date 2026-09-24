@@ -1,78 +1,66 @@
 #include <iostream>
 #include <gtest/gtest.h>
-#include "ExpressionFactory.hpp"
-#include "NullExpression.hpp"
+#include "string_calculator/expression_factory.hpp"
+#include "string_calculator/null_expression.hpp"
 
-TEST(ExpressionFactoryTests, TestCorrectBrackets)
-{
-	EXPECT_FALSE(typeid(*ExpressionFactory::create("(1)+(1)")) == typeid(NullExpression));
-    EXPECT_FALSE(typeid(*ExpressionFactory::create("(1)+((1)+(1))+(1)")) == typeid(NullExpression));
+TEST(ExpressionFactoryTests, TestCorrectBrackets) {
+	EXPECT_EQ(dynamic_cast<NullExpression*>(ExpressionFactory::create("(1)+(1)").get()), nullptr);
+    EXPECT_EQ(dynamic_cast<NullExpression*>(ExpressionFactory::create("(1)+((1)+(1))+(1)").get()), nullptr);
 }
 
-TEST(ExpressionFactoryTests, TestIncorrectBrackets)
-{
-	EXPECT_TRUE(typeid(*ExpressionFactory::create("(1)+)(1)")) == typeid(NullExpression));
-    EXPECT_TRUE(typeid(*ExpressionFactory::create(")((1)*(((1)))")) == typeid(NullExpression));
-    EXPECT_TRUE(typeid(*ExpressionFactory::create("(1)+(1))")) == typeid(NullExpression));
-	EXPECT_TRUE(typeid(*ExpressionFactory::create("((1)-1")) == typeid(NullExpression));
+TEST(ExpressionFactoryTests, TestIncorrectBrackets) {
+    EXPECT_NE(dynamic_cast<NullExpression*>(ExpressionFactory::create("(1)+)(1)").get()), nullptr);
+    EXPECT_NE(dynamic_cast<NullExpression*>(ExpressionFactory::create(")((1)*(((1)))").get()), nullptr);
+    EXPECT_NE(dynamic_cast<NullExpression*>(ExpressionFactory::create("(1)+(1))").get()), nullptr);
+    EXPECT_NE(dynamic_cast<NullExpression*>(ExpressionFactory::create("((1)-1").get()), nullptr);
 }
 
-TEST(ExpressionFactoryTests, TestBasicNumber)
-{
+TEST(ExpressionFactoryTests, TestBasicNumber) {
 	auto exp = ExpressionFactory::create("10");
 	EXPECT_EQ(exp->result(), 10.0);
 }
 
-TEST(ExpressionFactoryTests, TestNumberInBrackets)
-{
+TEST(ExpressionFactoryTests, TestNumberInBrackets) {
 	auto exp = ExpressionFactory::create("(11)");
 	EXPECT_EQ(exp->result(), 11.0);
 }
 
-TEST(ExpressionFactoryTests, TestBasicAdding)
-{
+TEST(ExpressionFactoryTests, TestBasicAdding) {
 	auto exp = ExpressionFactory::create("2+2");
 	EXPECT_EQ(exp->result(), 4.0);
 }
 
-TEST(ExpressionFactoryTests, TestBasicSubstracting)
-{
+TEST(ExpressionFactoryTests, TestBasicSubstracting) {
 	auto exp = ExpressionFactory::create("3-1");
     EXPECT_EQ(exp->result(), 2.0);
 }
 
-TEST(ExpressionFactoryTests, TestAddingAndSubstraction)
-{
+TEST(ExpressionFactoryTests, TestAddingAndSubstraction) {
 	auto exp = ExpressionFactory::create("2+3-1");
     EXPECT_EQ(exp->result(), 4.0);
 }
 
-TEST(ExpressionFactoryTests, TestTripleAdding)
-{
+TEST(ExpressionFactoryTests, TestTripleAdding) {
 	auto exp = ExpressionFactory::create("2+3+1");
     EXPECT_EQ(exp->result(), 6.0);
 }
 
-TEST(ExpressionFactoryTests, TestTripleSubstracting)
-{
+TEST(ExpressionFactoryTests, TestTripleSubstracting) {
 	auto exp = ExpressionFactory::create("2-3-1");
     EXPECT_EQ(exp->result(), -2.0);
 }
 
-TEST(ExpressionFactoryTests, TestAddingBrackets)
-{
+TEST(ExpressionFactoryTests, TestAddingBrackets) {
 	auto exp = ExpressionFactory::create("(7-3)+(2-1)");
     EXPECT_EQ(exp->result(), 5.0);
 }
 
-TEST(ExpressionFactoryTests, TestBasicMultiplying)
-{
+TEST(ExpressionFactoryTests, TestBasicMultiplying) {
 	auto exp = ExpressionFactory::create("2*2");
 	EXPECT_EQ(exp->result(), 4.0);
 }
 
-TEST(ExpressionFactoryTests, TestBasicDividing)
-{
+TEST(ExpressionFactoryTests, TestBasicDividing) {
 	auto exp = ExpressionFactory::create("10/4");
 	EXPECT_EQ(exp->result(), 2.5);
 }
@@ -89,50 +77,42 @@ TEST(ExpressionFactoryTests, TestTripleDividing)
 	EXPECT_EQ(exp->result(), 5.0);
 }
 
-TEST(ExpressionFactoryTests, TestMutliplyingAndDividing)
-{
+TEST(ExpressionFactoryTests, TestMutliplyingAndDividing) {
 	auto exp = ExpressionFactory::create("15/3*20/5");
 	EXPECT_EQ(exp->result(), 20.0);
 }
 
-TEST(ExpressionFactoryTests, TestAddingMultiplying)
-{
+TEST(ExpressionFactoryTests, TestAddingMultiplying) {
 	auto exp = ExpressionFactory::create("2*3+6*1");
 	EXPECT_EQ(exp->result(), 12.0);
 }
 
-TEST(ExpresisonFactoryTests, TestSubstractingDividing)
-{
+TEST(ExpresisonFactoryTests, TestSubstractingDividing) {
 	auto exp = ExpressionFactory::create("30/5-40/20");
 	EXPECT_EQ(exp->result(), 4.0);
 }
 
-TEST(ExpresisonFactoryTests, TestBasicFunction)
-{
+TEST(ExpresisonFactoryTests, TestBasicFunction) {
 	auto exp = ExpressionFactory::create("sqrt(4)");
 	EXPECT_EQ(exp->result(), 2.0);
 }
 
-TEST(ExpresisonFactoryTests, TestFunctionInFunction)
-{
+TEST(ExpresisonFactoryTests, TestFunctionInFunction) {
 	auto exp = ExpressionFactory::create("sqrt(sqrt(256))");
 	EXPECT_EQ(exp->result(), 4.0);
 }
 
-TEST(ExpresisonFactoryTests, TestAddingFunctions)
-{
+TEST(ExpresisonFactoryTests, TestAddingFunctions) {
 	auto exp = ExpressionFactory::create("sqrt(4)+sqrt(100)");
 	EXPECT_EQ(exp->result(), 12.0);
 }
 
-TEST(ExpresisonFactoryTests, TestSubstractingFunctions)
-{
+TEST(ExpresisonFactoryTests, TestSubstractingFunctions) {
 	auto exp = ExpressionFactory::create("sqrt(100)-sqrt(64)");
 	EXPECT_EQ(exp->result(), 2.0);
 }
 
-TEST(ExpresisonFactoryTests, TestSubstractingInsideFunction)
-{
+TEST(ExpresisonFactoryTests, TestSubstractingInsideFunction) {
 	auto exp = ExpressionFactory::create("sqrt(sqrt(100)-sqrt(36))");
 	EXPECT_EQ(exp->result(), 2.0);
 }
